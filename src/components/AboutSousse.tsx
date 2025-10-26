@@ -9,7 +9,7 @@ const AboutSousse: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-8 md:mb-0">
             <img
-              src="/public/AboutSousse.jpeg"
+              src="/AboutSousse.jpeg"
               alt="Sousse"
               className="rounded-lg shadow-lg"
             />
