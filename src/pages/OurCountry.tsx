@@ -6,7 +6,7 @@ import bizerte1      from '@/assets/bizerte1.webp';
 import bizerte2      from '@/assets/bizerte2.webp';
 import douz1         from '@/assets/douz1.webp';
 import eljem1        from '@/assets/eljem1.webp';
-import eljem3        from '@/assets/Eljem3.jpeg';
+import eljem3        from '@/assets/ElJem3.jpeg';
 import sidibou3      from '@/assets/sidibou3.webp';
 import sousse1       from '@/assets/sousse1.jpg';
 import sousse2       from '@/assets/sousse2.jpg';
