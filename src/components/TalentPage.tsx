@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/components/TalentPage.tsx
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { request, gql } from 'graphql-request';
-import Navbar from './Navbar';
-import Footer from './Footer';
-import ImageCarousel from './ImageCarousel'; // Assuming this is your existing component
-
+import React, { useState, useEffect } from "react";
+import { request, gql } from "graphql-request";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import p2 from "@/assets/p2.png";
+import gta from "@/assets/gta.png";
 // GraphQL query
 const GET_OPPORTUNITIES = gql`
   query getOpportunities($startDate: String!, $endDate: String!) {
@@ -59,20 +59,29 @@ const TalentPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [visibleCount, setVisibleCount] = useState(6);
+
+  // Filter projects by search term
+  const filteredProjects = projects.filter((project) =>
+    (project.title || "").toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   // Fetch data from GraphQL
   useEffect(() => {
     const fetchOpportunities = async () => {
-      const endpoint = 'https://gis-api.aiesec.org/graphql?access_token=J0EiRZx2Uwxgb265rDsyvrgOWemSc0bqlCOGQklFDYo';
+      const endpoint =
+        "https://gis-api.aiesec.org/graphql?access_token=J0EiRZx2Uwxgb265rDsyvrgOWemSc0bqlCOGQklFDYo";
       const variables = {
-        startDate: '2025-01-01',
-        endDate: '2026-12-31',
+        startDate: "2025-01-01",
+        endDate: "2026-12-31",
       };
 
       try {
         const data = await request(endpoint, GET_OPPORTUNITIES, variables);
         setProjects(data.opportunities.data || []);
       } catch (err) {
-        setError('Failed to fetch opportunities');
+        setError("Failed to fetch opportunities");
         console.error(err);
       } finally {
         setLoading(false);
@@ -82,124 +91,224 @@ const TalentPage: React.FC = () => {
     fetchOpportunities();
   }, []);
 
-  // Video carousel state
-  const videos = [
-    { id: 1, src: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Talent Showcases' },
-  ];
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % videos.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [videos.length]);
-
   if (loading) return <div className="text-center py-16">Loading...</div>;
-  if (error) return <div className="text-center py-16 text-red-500">{error}</div>;
+  if (error)
+    return <div className="text-center py-16 text-red-500">{error}</div>;
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <header className="h-[80vh] bg-cover bg-center flex items-center justify-center text-white"
-        style={{
-          backgroundImage: `url('https://whereitallbegins.aiesec.org.eg/assets/images/iGV/mb_gta.png')`,
-        }}
-      >
-        <div className="text-center bg-opacity-50 p-6 rounded">
-          <h1 className="text-4xl md:text-5xl font-bold">Talent Program</h1>
-          <p className="text-lg md:text-xl mt-2">Unleash Your Creative Potential</p>
+      <div className="bg-[#0f0f0f]">
+        <img src={p2} alt="" />
+      </div>
+
+      <div className="mt-32 flex flex-col items-center justify-center px-6">
+        <div className="relative">
+          <img
+            src={gta}
+            alt="Global Talent Logo"
+            className="size-32 relative z-10 drop-shadow-2xl "
+          />
         </div>
-      </header>
-      <section className="py-16 bg-gray-100">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-8">Watch Talent in Action</h2>
-          <div className="carousel relative">
-            <AnimatePresence>
-              {videos.map((video, index) => (
-                <motion.div
-                  key={video.id}
-                  className={`carousel-item ${index === activeIndex ? 'active' : index === (activeIndex + 1) % videos.length ? 'next' : index === (activeIndex - 1 + videos.length) % videos.length ? 'prev' : ''}`}
-                  initial={{ opacity: 0, zIndex: 0 }}
-                  animate={{ opacity: index === activeIndex ? 1 : 0, zIndex: index === activeIndex ? 10 : 5 }}
-                  exit={{ opacity: 0, zIndex: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <iframe
-                    width="100%"
-                    height="315"
-                    src={video.src}
-                    title={video.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-          <p className="mt-4 text-gray-700">
-            Explore videos showcasing the talents and skills nurtured in our program.
+
+        <div className="mt-8 max-w-2xl">
+          <h2 className="text-3xl font-bold text-center mb-6  text-[#0CB9C1]">
+            Incoming Global Talent
+          </h2>
+
+          <p className="text-gray-300 text-center text-lg leading-relaxed">
+            <span className="text-white font-semibold">Global Talent</span> is a
+            transformative internship experience designed for ambitious young
+            professionals aged 18-30. We connect emerging talent with
+            world-class opportunities, fostering
+            <span className="text-blue-400 font-medium">
+              {" "}
+              career development
+            </span>
+            ,
+            <span className="text-purple-400 font-medium">
+              {" "}
+              cross-cultural collaboration
+            </span>
+            , and
+            <span className="text-pink-400 font-medium">
+              {" "}
+              global networking
+            </span>{" "}
+            in today's interconnected business landscape.
           </p>
-        </div>
-      </section>
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Places You Can Visit</h2>
-          <ImageCarousel />
-        </div>
-      </section>
-      <section className="py-16 bg-gray-100">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-3xl font-bold mb-8">Our Projects</h1>
-          <div className="flex justify-between items-center mb-4">
-            <p className="text-lg text-cyan-600">{projects.length} Openings were found</p>
-            <div className="flex items-center space-x-2">
-              <button className="bg-cyan-500 text-white px-4 py-2 rounded hover:bg-cyan-600">Filter</button>
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Slots start date from: JJ/MM/AAAA"
-                  className="bg-white text-black px-4 py-2 rounded border border-gray-300 focus:outline-none"
-                />
-                <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">⏳</span>
-              </div>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg px-6 py-3 hover:bg-white/10 transition-all">
+              <p className="text-blue-400 font-semibold text-sm">Ages 18-30</p>
+            </div>
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg px-6 py-3 hover:bg-white/10 transition-all">
+              <p className="text-purple-400 font-semibold text-sm">
+                Global Network
+              </p>
+            </div>
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg px-6 py-3 hover:bg-white/10 transition-all">
+              <p className="text-pink-400 font-semibold text-sm">
+                Career Growth
+              </p>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
+        </div>
+      </div>
+
+      <div className="w-full mt-14 py-20 px-6">
+        {/* Cards Section */}
+        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6">
+          {/* Card 1 */}
+          <div className=" border-2 border-[#0CB9C1]  rounded-2xl p-8 ">
+            <h3 className="text-3xl font-bold text-[#0CB9C1] mb-5">
+              Global
+              <br />
+              Opportunity
+            </h3>
+            <p className="text-white text-base leading-relaxed">
+              Expand your horizon by developing your career in a global setting.
+              Work in a whole new environment and culture, while adapting to a
+              local life in another country.
+            </p>
+          </div>
+
+          {/* Card 2 */}
+          <div className="bg-[#0CB9C1] rounded-2xl p-8">
+            <h3 className="text-3xl font-bold text-white mb-5">
+              Develop
+              <br />
+              Yourself
+            </h3>
+            <p className="text-white text-base leading-relaxed">
+              Grow and develop develop your leadership competencies and personal
+              skills by going through practical experiences and
+              learning-by-doing.
+            </p>
+          </div>
+
+          {/* Card 3 */}
+
+          <div className=" border-2 border-[#0CB9C1]  rounded-2xl p-8 ">
+            <h3 className="text-3xl font-bold text-[#0CB9C1] mb-5">
+              Global
+              <br />
+              Opportunity
+            </h3>
+            <p className="text-white text-base leading-relaxed">
+              Launch yourself into a challenging role that allows you to gain a
+              professional edge with our partners who are dedicated to provide
+              an enriching experience.
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      {/* Opportunities Section */}
+      <section className="py-20 mt-24 text-white">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-[#0CB9C1] mb-4">
+              Explore Our Opportunities
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Find exciting professional experiences in Sousse and take
+              your career to the next level with AIESEC’s Global Talent program.
+            </p>
+          </div>
+
+          {/* Toolbar */}
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-12">
+            <p className="text-[#0CB9C1] text-3xl font-bold">
+              {projects.length}{" "}
+              <span className="text-white font-medium">
+                Opportunities Available
+              </span>
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <input
+                type="text"
+                placeholder="Search by opportunity name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-[#1a1a1a] border border-gray-700 rounded-xl px-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0CB9C1] transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProjects.slice(0, visibleCount).map((project) => (
               <div
                 key={project.id}
-                className="bg-cyan-500 text-white p-6 rounded-lg shadow-md border border-cyan-600"
+                className="border border-[#0CB9C1]/40 rounded-2xl p-6 hover:bg-[#0CB9C1]/10 transition-all duration-300"
               >
-                <h3 className="text-xl font-bold mb-2">{project.title || project.role}</h3>
-                <p className="text-sm mb-1">
-                  Duration: {project.opportunity_duration_type?.duration_type || project.duration}
-                </p>
-                <p className="text-sm mb-1">
-                  Start Date: {new Date(project.created_at || project.startDate).toLocaleDateString()}
-                </p>
-                <p className="text-sm mb-1">
-                  Salary: {project.specifics_info?.salary || project.salary}
-                </p>
-                <p className="text-sm mb-1">
-                  Openings: {project.openings}
-                </p>
-                <p className="text-sm">
-                  Location: {project.organisation?.name || project.location}
-                </p>
-                <a
-                  href={`https://aiesec.org/opportunity/global-talent/${project.id}`}
-                  className="mt-4 inline-block text-orange-200 hover:text-yellow-300 underline"
-                  target='_blank'
-                >
-                  See more
-                </a>
+                {/* Header */}
+                <h3 className="text-xl font-bold text-[#0CB9C1] mb-3">
+                  {project.title || project.role}
+                </h3>
+
+                {/* Info */}
+                <div className="space-y-1 text-sm text-gray-300">
+                  <p>
+                    <span className="font-semibold text-white">
+                      Organisation:
+                    </span>{" "}
+                    {project.organisation?.name || "N/A"}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-white">Duration:</span>{" "}
+                    {project.opportunity_duration_type?.duration_type ||
+                      project.duration}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-white">Created:</span>{" "}
+                    {new Date(project.created_at).toLocaleDateString()}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-white">Openings:</span>{" "}
+                    {project.openings}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-white">Salary:</span>{" "}
+                    {project.specifics_info?.salary
+                      ? `$${project.specifics_info.salary}`
+                      : "Not specified"}
+                  </p>
+                </div>
+
+                {/* Button */}
+                <div className="mt-5">
+                  <a
+                    href={`https://aiesec.org/opportunity/global-talent/${project.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block border border-[#0CB9C1] text-[#0CB9C1] px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#0CB9C1] hover:text-white transition-all duration-300"
+                  >
+                    View Details →
+                  </a>
+                </div>
               </div>
             ))}
           </div>
+
+          {/* Load More Button */}
+          {visibleCount < filteredProjects.length && (
+            <div className="text-center mt-10">
+              <button
+                onClick={() => setVisibleCount((prev) => prev + 6)}
+                className="border border-[#0CB9C1] text-[#0CB9C1] px-6 py-3 rounded-xl font-medium hover:bg-[#0CB9C1] hover:text-white transition-all duration-300"
+              >
+                Load More
+              </button>
+            </div>
+          )}
         </div>
       </section>
+
       <Footer />
     </div>
   );

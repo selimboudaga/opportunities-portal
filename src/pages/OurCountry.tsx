@@ -1,131 +1,117 @@
-// src/components/OurCountryPage.tsx
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import './customStyles.css'
+import React from "react";
+import Navbar from "../components/Navbar";
+import "./customStyles.css";
+import InfiniteMenu from "@/components/InfiniteMenu";
+import bizerte1      from '@/assets/bizerte1.webp';
+import bizerte2      from '@/assets/bizerte2.webp';
+import douz1         from '@/assets/douz1.webp';
+import eljem1        from '@/assets/eljem1.webp';
+import eljem3        from '@/assets/eljem3.jpeg';
+import sidibou3      from '@/assets/sidibou3.webp';
+import sousse1       from '@/assets/sousse1.jpg';
+import sousse2       from '@/assets/sousse2.jpg';
+import sousse3       from '@/assets/sousse3.jpeg';
+import sousse4       from '@/assets/sousse4.jpg';
+import sousse5       from '@/assets/sousse5.jpg';
+import sousse7       from "@/assets/sousse7.jpg";
+import zaghouan2     from '@/assets/zaghouan2.webp';
 
 const OurCountryPage: React.FC = () => {
-  // Video carousel state
-  // Only one video per page/product — keeps the section focused
-  const videos = [
-    { id: 1, src: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Tunisia Landscapes' }, // Replace with real video ID
-  ];
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  // Auto-scroll carousel
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % videos.length);
-    }, 5000); // Change slide every 5 seconds
-    return () => clearInterval(interval);
-  }, [videos.length]);
+  const items = [
+  {
+    image: eljem3, 
+    link: 'https://google.com/',
+    title: 'El-Jem Colosseum',
+    description: 'Step into one of the best-preserved Roman arenas in the world.',
+  },
+  {
+    image: sidibou3,
+    link: 'https://google.com/',
+    title: 'Sousse Medina',
+    description: 'Wander through centuries-old alleyways by the sparkling sea.',
+  },
+  {
+    image: sousse2,
+    link: 'https://google.com/',
+    title: 'Ribat of Sousse',
+    description: 'Climb ancient walls for panoramic Mediterranean views.',
+  },
+  {
+    image: sousse3,
+    link: 'https://google.com/',
+    title: 'Sousse Medina',
+    description: 'Golden-hour magic over the marina.',
+  },
+  {
+    image: sousse7,
+    link: 'https://google.com/',
+    title: 'Local Beaches',
+    description: 'Cycle, jog or simply sip coffee by the waves.',
+  },
+  {
+    image: sousse1,
+    link: 'https://google.com/',
+    title: 'Beach Vibes',
+    description: 'Powder-soft sand and turquoise water steps from the city.',
+  },
+  {
+    image: sousse4,
+    link: 'https://google.com/',
+    title: 'Local Port',
+    description: 'Cycle, jog or simply sip coffee by the waves.',
+  },
+  {
+    image: sousse5,
+    link: 'https://google.com/',
+    title: 'Night-time Sousse',
+    description: 'Neon lights reflect off the harbour for an evening to remember.',
+  },
+  {
+    image: bizerte1, // Image 1 - Colorful harbor
+    link: 'https://google.com/',
+    title: 'Colorful Marina',
+    description: 'Vibrant waterfront houses reflecting Tunisia\'s Mediterranean charm.',
+  },
+  {
+    image: bizerte2, // Image 2 - Beach aerial
+    link: 'https://google.com/',
+    title: 'Paradise Coastline',
+    description: 'Crystal-clear turquoise waters meet pristine sandy beaches.',
+  },
+  {
+    image: douz1, // Image 3 - Desert camels
+    link: 'https://google.com/',
+    title: 'Sahara Desert Adventure',
+    description: 'Experience the magic of camel trekking across golden dunes at sunset.',
+  },
+  {
+    image: zaghouan2, // Image 4 - Ancient ruins
+    link: 'https://google.com/',
+    title: 'Ancient Roman Ruins',
+    description: 'Discover centuries-old archaeological treasures framed by nature.',
+  },
+   {
+    image: eljem1, // Image 4 - Ancient ruins
+    link: 'https://google.com/',
+    title: 'Eljem',
+    description: 'Discover the ancient Roman amphitheater, a UNESCO World Heritage site.',
+  },
+];
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-screen bg-black text-white">
       {/* Navbar */}
       <Navbar />
 
-      {/* Header */}
-      <header className="h-[80vh] bg-cover bg-center flex items-center justify-center text-white"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=2070&auto=format&fit=crop')`, // Replace with a Tunisia landscape image
-        }}
-      >
-        <div className="text-center bg-opacity-50 p-6 rounded">
-          <h1 className="text-4xl md:text-5xl font-bold">Explore Tunisia</h1>
-          <p className="text-lg md:text-xl mt-2">A Journey Through History and Culture</p>
-        </div>
-      </header>
+      {/* Fullscreen Infinite Menu */}
+      <div className=" overflow-hidden h-screen w-screen">
+        <div className=" absolute inset-0  w-full h-full">
+        <InfiniteMenu items={items} />
+      </div>
+      </div>
+      
 
-      {/* Video Carousel Section */}
-      <section className="py-16 bg-gray-100">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-8">Watch Tunisia Come Alive</h2>
-          <div className="carousel relative">
-            <AnimatePresence>
-              {videos.map((video, index) => (
-                <motion.div
-                  key={video.id}
-                  className={`carousel-item ${index === activeIndex ? 'active' : index === (activeIndex + 1) % videos.length ? 'next' : index === (activeIndex - 1 + videos.length) % videos.length ? 'prev' : ''}`}
-                  initial={{ opacity: 0, zIndex: 0 }}
-                  animate={{ opacity: index === activeIndex ? 1 : 0, zIndex: index === activeIndex ? 10 : 5 }}
-                  exit={{ opacity: 0, zIndex: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <iframe
-                    width="100%"
-                    height="315"
-                    src={video.src}
-                    title={video.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-          <p className="mt-4 text-gray-700">
-            Discover Tunisia’s beauty through stunning videos showcasing its landscapes, cities, and traditions.
-          </p>
-        </div>
-      </section>
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Moments Across Tunisia</h2>
-          <div className="image-gallery">
-            {/* Image 1 */}
-            <div className="div1 relative overflow-hidden rounded-lg shadow-md">
-              <img
-                src="https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=2070&auto=format&fit=crop"
-                alt="Group at Landmark"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-              />
-              <p className="absolute bottom-2 left-2 text-white bg-black bg-opacity-60 p-1 rounded">Landmark Visit</p>
-            </div>
-            {/* Image 2 */}
-            <div className="div2 relative overflow-hidden rounded-lg shadow-md">
-              <img
-                src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop"
-                alt="Beach Scene"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-              />
-              <p className="absolute bottom-2 left-2 text-white bg-black bg-opacity-60 p-1 rounded">Beach Fun</p>
-            </div>
-            {/* Image 3 */}
-            <div className="div3 relative overflow-hidden rounded-lg shadow-md">
-              <img
-                src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop"
-                alt="Group Event"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-              />
-              <p className="absolute bottom-2 left-2 text-white bg-black bg-opacity-60 p-1 rounded">Cultural Event</p>
-            </div>
-                        {/* Image 6 */}
-            <div className="div4 relative overflow-hidden rounded-lg shadow-md">
-              <img
-                src="https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2070&auto=format&fit=crop"
-                alt="Market Scene"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-              />
-              <p className="absolute bottom-2 left-2 text-white bg-black bg-opacity-60 p-1 rounded">Market Day</p>
-            </div>
-            {/* Image 5 */}
-            <div className="div5 relative overflow-hidden rounded-lg shadow-md">
-              <img
-                src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop"
-                alt="City Street"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-              />
-              <p className="absolute bottom-2 left-2 text-white bg-black bg-opacity-60 p-1 rounded">City Life</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <Footer />
+      
     </div>
   );
 };

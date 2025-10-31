@@ -1,85 +1,87 @@
-// src/components/ProgramsSection.tsx
-import React from 'react';
-import { Link } from 'react-router-dom';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import gv from "@/assets/gv.png";
+import gta from "@/assets/gta.png";
+import gte from "@/assets/gte.png";
 
-const ProgramsSection: React.FC = () => {
-  const programs = [
+export function ProgramsSection() {
+  const data = [
     {
-      key: 'volunteer',
-      title: 'Global Volunteer',
-      desc: 'Join local projects and make a direct impact in Sousse communities. Short-term and long-term placements available.',
-      bgClass: 'bg-red-400',
-      textClass: 'text-white',
-      btnClass: 'bg-white',
-      btnTextClass: 'text-black',
-      path:"/our-programs/volunteer",
+      bg: "#F85A40",
+      logo: gv,
+      title: "Global Volunteer",
+      desc: "Develop your leadership through a volunteering project contributing to the Sustainable Development Goals.",
+      link: "#",
     },
     {
-      key: 'talent',
-      title: 'Global Talent',
-      desc: 'Connect with international companies and showcase your skills on meaningful projects and remote assignments.',
-      bgClass: 'bg-cyan-500',
-      textClass: 'text-white',
-      btnClass: 'bg-white',
-      btnTextClass: 'text-black',
-      path:"/outour-programs/talent",
+      bg: "#0CB9C1",
+      logo: gta,
+      title: "Global Talent",
+      desc: "Develop your leadership while boosting your career prospects with an international internship in your field",
+      link: "#",
     },
     {
-      key: 'teacher',
-      title: 'Global Teacher',
-      desc: 'Teach English and other subjects — support local schools and adult education through structured classes and workshops.',
-      bgClass: 'bg-orange-400',
-      textClass: 'text-black',
-      btnClass: 'bg-black',
-      btnTextClass: 'text-white',
-      path:"/our-programs/teacher",
+      bg: "#F48924",
+      logo: gte,
+      title: "Global Teaching",
+      desc: "Develop your leadership while boosting your career prospects with an opportunity to work as a teacher abroad.",
+      link: "#",
     },
   ];
 
   return (
-    <section className="py-16 bg-gray-200">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-8">Our Programs</h2>
-        <p className="text-lg text-gray-700 text-center mb-12">
-          Join our programs to explore Sousse’s culture, history and make a positive impact — find the right
-          opportunity for you below.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {programs.map((p) => (
-            <article
-              key={p.key}
-              className={`rounded-lg shadow-md p-6 flex flex-col ${p.bgClass} ${p.textClass}`}
-            >
-              <div className="flex items-center mb-4">
-                {/* decorative white circle badge for contrast */}
-                <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-white text-black font-bold mr-4">
-                  {p.title
-                    .split(' ')
-                    .map((s) => s[0])
-                    .slice(0, 2)
-                    .join('')}
-                </span>
-                <h3 className="text-xl font-semibold">{p.title}</h3>
-              </div>
-
-              <p className={`${p.textClass === 'text-white' ? 'text-white/90' : 'text-black/85'} flex-1`}>{p.desc}</p>
-
-              <div className="mt-6">
-                <Link
-                  to={p.path}
-                  className={`inline-block px-4 py-2 ${p.btnClass} ${p.btnTextClass} font-semibold rounded hover:opacity-90`}
-                  aria-label={`Learn more about ${p.title}`}
-                >
-                  Learn more
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
+    <section className="py-20 px-6 grid gap-10 md:grid-cols-3 max-w-6xl mx-auto">
+      {data.map((c) => (
+        <GlassCard key={c.title} {...c} />
+      ))}
     </section>
   );
+}
+
+type GlassCardProps = {
+  bg: string;
+  logo: string;
+  title: string;
+  desc: string;
+  link: string;
 };
 
-export default ProgramsSection;
+const GlassCard = ({ bg, logo, title, desc, link }: GlassCardProps) => {
+  return (
+    <div
+      className="group border-2 relative w-full h-[450px] rounded-3xl p-8 flex flex-col items-center text-center bg-black hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] transition-all duration-300"
+      style={{ borderColor: bg }}
+    >
+      {/* Logo */}
+      <div
+        className="size-[90px] -mt-[65px] rounded-full grid place-items-center shadow-xl transition-transform duration-300 group-hover:scale-110"
+        style={{ backgroundColor: "black" }}
+      >
+        <img src={logo} alt={title} className="size-[70px] object-contain" />
+      </div>
+
+      {/* Content */}
+      <div className="flex-grow mt-6">
+        <h3 style={{color:bg}} className="text-3xl font-bold mb-6">{title}</h3>
+        <p className="text-white text-base leading-relaxed px-2">
+          {desc}
+        </p>
+      </div>
+
+      {/* Button */}
+      <a
+        href={link}
+        className="inline-block mt-6 px-6 py-2.5 text-sm font-semibold text-white border rounded-full border-white/30 bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition-all duration-300"
+      >
+        See more →
+      </a>
+
+      {/* Subtle glow effect */}
+      <div
+        className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        style={{
+          boxShadow: `0 0 40px ${bg}33`,
+        }}
+      ></div>
+    </div>
+  );
+};

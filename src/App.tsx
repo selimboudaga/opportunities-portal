@@ -10,16 +10,18 @@ import VolunteerPage from './components/VolunteerPage';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        {/* Placeholder routes for other pages */}
-        <Route path="/our-country" element={<OurCountryPage />} />
-        <Route path="/our-programs/Talent" element={<TalentPage />} />
-        <Route path="/our-programs/Volunteer" element={<VolunteerPage />} />
-        <Route path="/our-programs/Teaching" element={<TeachingPage />} />
-      </Routes>
-    </Router>
+    <div className="min-h-screen" style={{ backgroundColor: '#060010' }}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {/* Placeholder routes for other pages */}
+          <Route path="/our-country" element={<OurCountryPage />} />
+          <Route path="/our-programs/Talent" element={<TalentPage />} />
+          <Route path="/our-programs/Volunteer" element={<VolunteerPage />} />
+          <Route path="/our-programs/Teaching" element={<TeachingPage />} />
+        </Routes>
+      </Router>
+    </div>
   );
 };
 

@@ -1,80 +1,189 @@
-// src/components/AnimatedScrollSection.tsx
-import React from 'react';
+import React, { useRef, useLayoutEffect, useState } from 'react';
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  useMotionValue,
+  useVelocity,
+  useAnimationFrame
+} from 'motion/react';
 
-const AnimatedScrollSection: React.FC = () => {
-  // A list of renditions/transliterations of "Sousse" across various scripts
-  const translations = [
-    'Sousse', // Latin
-    'سوسة', // Arabic
-    'سوسه', // alternative Arabic spelling
-    'Σούς', // Greek-ish transliteration
-    'スース', // Japanese Katakana (sūsu)
-    '苏斯', // Chinese simplified (approx.)
-    'सूसे', // Devanagari (Hindi)
-    'சூஸ்', // Tamil approximation
-    'Susa', // Latin variant
-  ];
+interface VelocityMapping {
+  input: [number, number];
+  output: [number, number];
+}
 
-  // prepare a long repeated string by duplicating the translations so the marquee loops smoothly
-  const repeated = [...translations, ...translations, ...translations];
+interface VelocityTextProps {
+  children: React.ReactNode;
+  baseVelocity: number;
+  scrollContainerRef?: React.RefObject<HTMLElement>;
+  className?: string;
+  damping?: number;
+  stiffness?: number;
+  numCopies?: number;
+  velocityMapping?: VelocityMapping;
+  parallaxClassName?: string;
+  scrollerClassName?: string;
+  parallaxStyle?: React.CSSProperties;
+  scrollerStyle?: React.CSSProperties;
+}
+
+interface ScrollVelocityProps {
+  scrollContainerRef?: React.RefObject<HTMLElement>;
+  texts: string[];
+  velocity?: number;
+  className?: string;
+  damping?: number;
+  stiffness?: number;
+  numCopies?: number;
+  velocityMapping?: VelocityMapping;
+  parallaxClassName?: string;
+  scrollerClassName?: string;
+  parallaxStyle?: React.CSSProperties;
+  scrollerStyle?: React.CSSProperties;
+}
+
+function useElementWidth<T extends HTMLElement>(ref: React.RefObject<T | null>): number {
+  const [width, setWidth] = useState(0);
+
+  useLayoutEffect(() => {
+    function updateWidth() {
+      if (ref.current) {
+        setWidth(ref.current.offsetWidth);
+      }
+    }
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, [ref]);
+
+  return width;
+}
+
+export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
+  scrollContainerRef,
+  texts = [],
+  velocity = 80,
+  className = '',
+  damping = 50,
+  stiffness = 400,
+  numCopies = 5,
+  velocityMapping = { input: [0, 1000], output: [0, 5] },
+  parallaxClassName = 'w-full overflow-hidden mx-auto',
+  scrollerClassName = 'flex whitespace-nowrap text-center font-sans text-xl font-semibold text-white tracking-tight md:text-2xl md:leading-tight',
+  parallaxStyle,
+  scrollerStyle
+}) => {
+  // Group incoming texts into lines of 3 words each.
+  // If the user passed multi-word strings, split them into words first.
+  const allWords: string[] = texts.flatMap((t: string) => (t ? String(t).split(/\s+/) : []));
+  const groupedTexts: string[] = [];
+  for (let i = 0; i < allWords.length; i += 3) {
+    groupedTexts.push(allWords.slice(i, i + 3).join(' '));
+  }
+  // If grouping produced nothing (empty input), fall back to original texts
+  const linesToRender = groupedTexts.length > 0 ? groupedTexts : texts;
+  function VelocityText({
+    children,
+    baseVelocity = velocity,
+    scrollContainerRef,
+    className = '',
+    damping,
+    stiffness,
+    numCopies,
+    velocityMapping,
+    parallaxClassName,
+    scrollerClassName,
+    parallaxStyle,
+    scrollerStyle
+  }: VelocityTextProps) {
+    const baseX = useMotionValue(0);
+    const scrollOptions = scrollContainerRef ? { container: scrollContainerRef } : {};
+    const { scrollY } = useScroll(scrollOptions);
+    const scrollVelocity = useVelocity(scrollY);
+    const smoothVelocity = useSpring(scrollVelocity, {
+      damping: damping ?? 50,
+      stiffness: stiffness ?? 400
+    });
+    const velocityFactor = useTransform(
+      smoothVelocity,
+      velocityMapping?.input || [0, 1000],
+      velocityMapping?.output || [0, 5],
+      { clamp: false }
+    );
+
+    const copyRef = useRef<HTMLSpanElement>(null);
+    const copyWidth = useElementWidth(copyRef);
+
+    function wrap(min: number, max: number, v: number): number {
+      const range = max - min;
+      const mod = (((v - min) % range) + range) % range;
+      return mod + min;
+    }
+
+    const x = useTransform(baseX, v => {
+      if (copyWidth === 0) return '0px';
+      return `${wrap(-copyWidth, 0, v)}px`;
+    });
+
+    const directionFactor = useRef<number>(1);
+    useAnimationFrame(( delta) => {
+      let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
+
+      if (velocityFactor.get() < 0) {
+        directionFactor.current = -1;
+      } else if (velocityFactor.get() > 0) {
+        directionFactor.current = 1;
+      }
+
+      moveBy += directionFactor.current * moveBy * velocityFactor.get();
+      baseX.set(baseX.get() + moveBy);
+    });
+
+    const spans = [];
+    for (let i = 0; i < numCopies!; i++) {
+      spans.push(
+        <span className={`flex-shrink-0 ${className}`} key={i} ref={i === 0 ? copyRef : null}>
+          {children}
+        </span>
+      );
+    }
+
+    return (
+      <div className={`${parallaxClassName} relative overflow-hidden`} style={parallaxStyle}>
+        <motion.div
+          className={`${scrollerClassName} flex whitespace-nowrap text-center font-sans text-4xl font-bold tracking-[-0.02em] drop-shadow md:text-[4rem] md:leading-[5rem]`}
+          style={{ x, ...scrollerStyle }}
+        >
+          {spans}
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
-    <section className="py-8 text-yellow-200">
-      {/* Inline styles for marquee animation to avoid changing Tailwind config */}
-      <style>{`
-        .marquee-wrapper { overflow: hidden; }
-        .marquee { display: inline-flex; white-space: nowrap; align-items: center; gap: 3rem; }
-        @keyframes marquee-left {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes marquee-right {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0%); }
-        }
-        .marquee-animate { animation: marquee-left 28s linear infinite; }
-        .marquee-animate-reverse { animation: marquee-right 28s linear infinite; }
-        .marquee-item { font-weight: 700; font-size: 2.25rem; /* text-3xl */ }
-        @media (min-width: 768px) {
-          .marquee-item { font-size: 3rem; /* md:text-5xl-ish */ }
-        }
-      `}</style>
-
-      <div className="container mx-auto px-4">
-        <h2 className="sr-only">Sousse in many languages</h2>
-
-        <div className="marquee-wrapper">
-          {/* The marquee element contains the repeated list twice; animation shifts -50% so the second half follows seamlessly */}
-          <div className="marquee marquee-animate" aria-hidden="true" role="presentation">
-            {repeated.map((t, i) => (
-              <span key={`m1-${i}`} className="marquee-item text-blue-400 opacity-95">
-                {t}
-              </span>
-            ))}
-            {/* duplicate again to ensure smooth continuous loop */}
-            {repeated.map((t, i) => (
-              <span key={`m2-${i}`} className="marquee-item text-blue-400 opacity-95">
-                {t}
-              </span>
-            ))}
-          </div>
-          <div className="marquee marquee-animate-reverse" aria-hidden="true" role="presentation">
-            {repeated.map((t, i) => (
-              <span key={`m1-${i}`} className="marquee-item text-blue-400 opacity-95">
-                {t}
-              </span>
-            ))}
-            {/* duplicate again to ensure smooth continuous loop */}
-            {repeated.map((t, i) => (
-              <span key={`m2-${i}`} className="marquee-item text-blue-400 opacity-95">
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
+    <section className="w-full">
+      {linesToRender.map((text: string, index: number) => (
+        <VelocityText
+          key={index}
+          className={className}
+          baseVelocity={index % 2 !== 0 ? -velocity : velocity}
+          scrollContainerRef={scrollContainerRef}
+          damping={damping}
+          stiffness={stiffness}
+          numCopies={numCopies}
+          velocityMapping={velocityMapping}
+          parallaxClassName={parallaxClassName}
+          scrollerClassName={scrollerClassName}
+          parallaxStyle={parallaxStyle}
+          scrollerStyle={scrollerStyle}
+        >
+          {text}&nbsp;
+        </VelocityText>
+      ))}
     </section>
   );
 };
 
-export default AnimatedScrollSection;
+export default ScrollVelocity;
