@@ -4,6 +4,7 @@ import AboutSousse from "../components/AboutSousse";
 import Footer from "../components/Footer";
 import ScrollVelocity from "@/components/AnimationScrollSection";
 import { ProgramsSection } from "@/components/ProgramSection";
+import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
   return (
@@ -38,12 +39,18 @@ const Home: React.FC = () => {
               of Sousse
             </p>
             <div className="flex gap-4 justify-center">
-              <button className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-3 rounded-full font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-300 cursor-pointer ">
-                Explore Opportunities
-              </button>
-              <button className="border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
-                About Sousse
-              </button>
+              <a href="#programs">
+                <button className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-3 rounded-full font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-300 cursor-pointer ">
+                  Explore Opportunities
+                </button>
+              </a>
+                
+              
+              <Link to="/our-country">
+                <button className="border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
+                  About Sousse
+                </button>
+              </Link>
             </div>
             <div className="mt-8 flex gap-8 justify-center">
               <div className="text-center">
@@ -149,17 +156,17 @@ const Home: React.FC = () => {
             "苏斯", // Chinese simplified (approx.)
             "सूसे", // Devanagari (Hindi)
             "சூஸ்",
-            "سوسه",  // Tamil approximation
+            "سوسه", // Tamil approximation
             "Susa", // Latin variant
           ]}
           velocity={100}
           className="custom-scroll-text"
         />
       </div>
-      <div className="">
+      <div id="programs" className="">
         <ProgramsSection />
       </div>
-      
+
       <Footer />
     </div>
   );
