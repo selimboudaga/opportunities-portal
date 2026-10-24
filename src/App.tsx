@@ -3,9 +3,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import OurCountryPage from './pages/OurCountry';
-import TalentPage from './components/TalentPage';
-import TeachingPage from './components/TeachingPage';
-import VolunteerPage from './components/VolunteerPage';
+import Program from './pages/Program';
+import NotFound from './pages/NotFound';
 
 
 const App: React.FC = () => {
@@ -14,11 +13,10 @@ const App: React.FC = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* Placeholder routes for other pages */}
           <Route path="/our-country" element={<OurCountryPage />} />
-          <Route path="/our-programs/Talent" element={<TalentPage />} />
-          <Route path="/our-programs/Volunteer" element={<VolunteerPage />} />
-          <Route path="/our-programs/Teaching" element={<TeachingPage />} />
+          {/* talent | volunteer | teaching — see src/data/programs.tsx */}
+          <Route path="/our-programs/:slug" element={<Program />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </div>

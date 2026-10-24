@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import gv from "@/assets/gv.png";
 import gta from "@/assets/gta.png";
 import gte from "@/assets/gte.png";

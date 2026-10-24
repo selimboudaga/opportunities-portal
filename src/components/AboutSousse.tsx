@@ -1,6 +1,6 @@
 import { type FC, useRef } from "react";
 
-import { useScroll, useTransform, motion } from "framer-motion";
+import { useScroll, useTransform, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import sousse1 from "@/assets/sousse1.jpg";
 import sousse2 from "@/assets/sousse2.jpg";
