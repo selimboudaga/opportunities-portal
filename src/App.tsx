@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#060010' }}>
+    <div className="min-h-screen bg-background">
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />

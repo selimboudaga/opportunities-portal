@@ -9,6 +9,9 @@ import p3 from "@/assets/p3.webp";
 import gv from "@/assets/gv.png";
 import gta from "@/assets/gta.png";
 import gte from "@/assets/gte.png";
+import sousse2 from "@/assets/sousse2.jpg";
+import sousse6 from "@/assets/sousse6.jpg";
+import sousse7 from "@/assets/sousse7.jpg";
 
 export interface Program {
   /** Route segment under /our-programs/ and the key used to look this up. */
@@ -19,9 +22,20 @@ export interface Program {
   opportunitySlug: string;
   title: string;
   heading: string;
+  /** One-line summary, used on the home page slider. */
+  tagline: string;
+  /** Short label above the title on the slider. */
+  category: string;
   /** Brand colour, used for borders, headings and the filled card. */
   accent: string;
+  /** Wide programme banner, used at the top of the programme page. */
   banner: string;
+  /**
+   * Backdrop for the home page panel. Deliberately a city photo, not `banner`:
+   * the banners already carry the programme logo and wordmark baked in, which
+   * collided with the panel's own heading.
+   */
+  panelImage: string;
   logo: string;
   intro: ReactNode;
   badges: { label: string; color: string }[];
@@ -36,8 +50,12 @@ const volunteer: Program = {
   opportunitySlug: "global-volunteer",
   title: "Global Volunteer",
   heading: "Incoming Global Volunteer",
+  tagline:
+    "Develop your leadership through a volunteering project contributing to the Sustainable Development Goals.",
+  category: "Social Impact",
   accent: "#F85A40",
   banner: p1,
+  panelImage: sousse7,
   logo: gv,
   intro: (
     <>
@@ -87,8 +105,12 @@ const talent: Program = {
   opportunitySlug: "global-talent",
   title: "Global Talent",
   heading: "Incoming Global Talent",
+  tagline:
+    "Develop your leadership while boosting your career prospects with an international internship in your field.",
+  category: "Professional Internship",
   accent: "#0CB9C1",
   banner: p2,
+  panelImage: sousse2,
   logo: gta,
   intro: (
     <>
@@ -153,8 +175,12 @@ const teaching: Program = {
   opportunitySlug: "global-teacher",
   title: "Global Teacher",
   heading: "Incoming Global Teacher",
+  tagline:
+    "Develop your leadership while boosting your career prospects with an opportunity to work as a teacher abroad.",
+  category: "Teaching Abroad",
   accent: "#F48924",
   banner: p3,
+  panelImage: sousse6,
   logo: gte,
   intro: (
     <>
@@ -206,6 +232,9 @@ export const programs: Record<string, Program> = {
   [talent.slug]: talent,
   [teaching.slug]: teaching,
 };
+
+/** Display order for the home page slider. */
+export const programList: Program[] = [volunteer, talent, teaching];
 
 /** Looks up a programme by route segment, ignoring case. */
 export const findProgram = (slug: string | undefined): Program | undefined =>

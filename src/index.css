@@ -39,6 +39,14 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* AIESEC brand palette — use these instead of repeating hex values. */
+  --color-brand: #037ef3;
+  --color-gv: #f85a40;
+  --color-gta: #0cb9c1;
+  --color-gte: #f48924;
+  --color-surface: #070a12;
+  --color-surface-raised: #0e131f;
 }
 
 :root {
@@ -77,19 +85,21 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  /* Deep cool navy-black: sits under the AIESEC blue without the purple cast
+     of the old #060010, and keeps the brand accents vivid. */
+  --background: #070a12;
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: #0e131f;
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: #0e131f;
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
+  --primary: #037ef3;
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: #151b29;
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
+  --muted: #151b29;
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
+  --accent: #151b29;
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);

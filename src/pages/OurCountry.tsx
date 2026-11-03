@@ -1,117 +1,116 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import "./customStyles.css";
-import InfiniteMenu from "@/components/InfiniteMenu";
-import bizerte1      from '@/assets/bizerte1.webp';
-import bizerte2      from '@/assets/bizerte2.webp';
-import douz1         from '@/assets/douz1.webp';
-import eljem1        from '@/assets/eljem1.webp';
-import eljem3        from '@/assets/ElJem3.jpeg';
-import sidibou3      from '@/assets/sidibou3.webp';
-import sousse1       from '@/assets/sousse1.jpg';
-import sousse2       from '@/assets/sousse2.jpg';
-import sousse3       from '@/assets/sousse3.jpeg';
-import sousse4       from '@/assets/sousse4.jpg';
-import sousse5       from '@/assets/sousse5.jpg';
-import sousse7       from "@/assets/sousse7.jpg";
-import zaghouan2     from '@/assets/zaghouan2.webp';
+import PortalCarousel, {
+  type PortalCarouselImage,
+} from "@/components/ui/portal-carousel";
+import bizerte1 from "@/assets/bizerte1.webp";
+import bizerte2 from "@/assets/bizerte2.webp";
+import douz1 from "@/assets/douz1.webp";
+import eljem1 from "@/assets/eljem1.webp";
+import eljem3 from "@/assets/ElJem3.jpeg";
+import sidibou3 from "@/assets/sidibou3.webp";
+import sousse1 from "@/assets/sousse1.jpg";
+import sousse2 from "@/assets/sousse2.jpg";
+import sousse3 from "@/assets/sousse3.jpeg";
+import sousse4 from "@/assets/sousse4.jpg";
+import sousse5 from "@/assets/sousse5.jpg";
+import sousse7 from "@/assets/sousse7.jpg";
+import zaghouan2 from "@/assets/zaghouan2.webp";
 
-const OurCountryPage: React.FC = () => {
-  const items = [
+const images: PortalCarouselImage[] = [
   {
-    image: eljem3, 
-    link: 'https://google.com/',
-    title: 'El-Jem Colosseum',
-    description: 'Step into one of the best-preserved Roman arenas in the world.',
+    src: eljem3,
+    title: "El Jem Amphitheatre",
+    description:
+      "Step into one of the best-preserved Roman arenas in the world.",
+    alt: "The Roman amphitheatre at El Jem",
   },
   {
-    image: sidibou3,
-    link: 'https://google.com/',
-    title: 'Sousse Medina',
-    description: 'Wander through centuries-old alleyways by the sparkling sea.',
+    src: sidibou3,
+    title: "Sidi Bou Said",
+    description: "Blue shutters, white walls and the sea below every corner.",
+    alt: "Blue and white houses above the sea at Sidi Bou Said",
   },
   {
-    image: sousse2,
-    link: 'https://google.com/',
-    title: 'Ribat of Sousse',
-    description: 'Climb ancient walls for panoramic Mediterranean views.',
+    src: sousse3,
+    title: "Sousse Medina",
+    description:
+      "Wander through centuries-old alleyways by the sparkling sea.",
+    alt: "The UNESCO-listed medina of Sousse",
   },
   {
-    image: sousse3,
-    link: 'https://google.com/',
-    title: 'Sousse Medina',
-    description: 'Golden-hour magic over the marina.',
+    src: sousse2,
+    title: "Ribat of Sousse",
+    description: "Climb ancient walls for panoramic Mediterranean views.",
+    alt: "The ribat fortress in Sousse",
   },
   {
-    image: sousse7,
-    link: 'https://google.com/',
-    title: 'Local Beaches',
-    description: 'Cycle, jog or simply sip coffee by the waves.',
+    src: sousse7,
+    title: "The Corniche",
+    description: "Cycle, jog or simply sip coffee by the waves.",
+    alt: "The seafront promenade at Sousse",
   },
   {
-    image: sousse1,
-    link: 'https://google.com/',
-    title: 'Beach Vibes',
-    description: 'Powder-soft sand and turquoise water steps from the city.',
+    src: sousse1,
+    title: "Sousse Beach",
+    description: "Powder-soft sand and turquoise water steps from the city.",
+    alt: "Sand and sea at Sousse",
   },
   {
-    image: sousse4,
-    link: 'https://google.com/',
-    title: 'Local Port',
-    description: 'Cycle, jog or simply sip coffee by the waves.',
+    src: sousse4,
+    title: "The Port",
+    description: "Fishing boats, ferries and the working edge of the city.",
+    alt: "The port at Sousse",
   },
   {
-    image: sousse5,
-    link: 'https://google.com/',
-    title: 'Night-time Sousse',
-    description: 'Neon lights reflect off the harbour for an evening to remember.',
+    src: sousse5,
+    title: "Sousse by Night",
+    description:
+      "Neon lights reflect off the harbour for an evening to remember.",
+    alt: "The harbour at Sousse after dark",
   },
   {
-    image: bizerte1, // Image 1 - Colorful harbor
-    link: 'https://google.com/',
-    title: 'Colorful Marina',
-    description: 'Vibrant waterfront houses reflecting Tunisia\'s Mediterranean charm.',
+    src: bizerte1,
+    title: "Bizerte Harbour",
+    description:
+      "Vibrant waterfront houses reflecting Tunisia's Mediterranean charm.",
+    alt: "Colourful houses along the old harbour at Bizerte",
   },
   {
-    image: bizerte2, // Image 2 - Beach aerial
-    link: 'https://google.com/',
-    title: 'Paradise Coastline',
-    description: 'Crystal-clear turquoise waters meet pristine sandy beaches.',
+    src: bizerte2,
+    title: "Northern Coast",
+    description: "Crystal-clear turquoise water meets pristine sandy beaches.",
+    alt: "Turquoise water and sand on Tunisia's northern coast",
   },
   {
-    image: douz1, // Image 3 - Desert camels
-    link: 'https://google.com/',
-    title: 'Sahara Desert Adventure',
-    description: 'Experience the magic of camel trekking across golden dunes at sunset.',
+    src: douz1,
+    title: "The Sahara at Douz",
+    description:
+      "Camel trekking across golden dunes as the sun drops behind them.",
+    alt: "Camels crossing dunes near Douz at sunset",
   },
   {
-    image: zaghouan2, // Image 4 - Ancient ruins
-    link: 'https://google.com/',
-    title: 'Ancient Roman Ruins',
-    description: 'Discover centuries-old archaeological treasures framed by nature.',
+    src: zaghouan2,
+    title: "Zaghouan",
+    description:
+      "Centuries-old archaeological treasures framed by mountain and pine.",
+    alt: "Roman ruins framed by hills at Zaghouan",
   },
-   {
-    image: eljem1, // Image 4 - Ancient ruins
-    link: 'https://google.com/',
-    title: 'Eljem',
-    description: 'Discover the ancient Roman amphitheater, a UNESCO World Heritage site.',
+  {
+    src: eljem1,
+    title: "Inside El Jem",
+    description:
+      "Tiered stone seating that once held thirty thousand spectators.",
+    alt: "The tiered seating inside the El Jem amphitheatre",
   },
 ];
 
+const OurCountryPage: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white">
-      {/* Navbar */}
+    <div className="min-h-screen bg-surface text-white">
       <Navbar />
 
-      {/* Fullscreen Infinite Menu */}
-      <div className=" overflow-hidden h-screen w-screen">
-        <div className=" absolute inset-0  w-full h-full">
-        <InfiniteMenu items={items} />
-      </div>
-      </div>
-      
-
-      
+      <PortalCarousel images={images} label="Next" thumbWidth={200} />
     </div>
   );
 };

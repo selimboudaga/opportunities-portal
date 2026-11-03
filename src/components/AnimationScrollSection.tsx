@@ -75,15 +75,10 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
   parallaxStyle,
   scrollerStyle
 }) => {
-  // Group incoming texts into lines of 3 words each.
-  // If the user passed multi-word strings, split them into words first.
-  const allWords: string[] = texts.flatMap((t: string) => (t ? String(t).split(/\s+/) : []));
-  const groupedTexts: string[] = [];
-  for (let i = 0; i < allWords.length; i += 3) {
-    groupedTexts.push(allWords.slice(i, i + 3).join(' '));
-  }
-  // If grouping produced nothing (empty input), fall back to original texts
-  const linesToRender = groupedTexts.length > 0 ? groupedTexts : texts;
+  // One marquee row per entry. This used to flatten every entry to words and
+  // regroup them three at a time, which is why unrelated scripts ended up
+  // sharing a row — the caller decides what belongs on a line, not this.
+  const linesToRender = texts.filter(Boolean);
   function VelocityText({
     children,
     baseVelocity = velocity,
@@ -151,9 +146,12 @@ export const ScrollVelocity: React.FC<ScrollVelocityProps> = ({
     }
 
     return (
-      <div className={`${parallaxClassName} relative overflow-hidden`} style={parallaxStyle}>
+      <div className={`${parallaxClassName} relative overflow-hidden py-1.5`} style={parallaxStyle}>
         <motion.div
-          className={`${scrollerClassName} flex whitespace-nowrap text-center font-sans text-4xl font-bold tracking-[-0.02em] drop-shadow md:text-[4rem] md:leading-[5rem]`}
+          // leading-[1.5] plus the row padding below: Arabic, Devanagari and
+          // Tamil have far taller ascenders and descenders than Latin, and a
+          // tight line box clipped them against the row's overflow-hidden.
+          className={`${scrollerClassName} flex whitespace-nowrap text-center font-sans text-2xl font-bold tracking-[-0.02em] drop-shadow leading-[1.5] md:text-[2rem]`}
           style={{ x, ...scrollerStyle }}
         >
           {spans}

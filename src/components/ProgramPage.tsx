@@ -10,6 +10,9 @@ import { fetchOpportunities, type Opportunity } from "@/lib/gis";
 
 const PAGE_SIZE = 6;
 
+/** Programme pages sit on the banners' own near-black, not the site surface. */
+const PAGE_BG = "#060111";
+
 interface ProgramPageProps {
   program: Program;
 }
@@ -62,11 +65,18 @@ const ProgramPage: React.FC<ProgramPageProps> = ({ program }) => {
   return (
     <div
       className="min-h-screen flex flex-col"
-      style={{ "--program-accent": program.accent } as React.CSSProperties}
+      style={
+        {
+          "--program-accent": program.accent,
+          // Matches the dark edge baked into the programme banners, so the
+          // image meets the page with no visible seam.
+          backgroundColor: PAGE_BG,
+        } as React.CSSProperties
+      }
     >
       <Navbar />
-      <div className="bg-[#0f0f0f]">
-        <img src={program.banner} alt="" />
+      <div style={{ backgroundColor: PAGE_BG }}>
+        <img src={program.banner} alt="" className="w-full" />
       </div>
 
       <div className="mt-32 flex flex-col items-center justify-center px-6">

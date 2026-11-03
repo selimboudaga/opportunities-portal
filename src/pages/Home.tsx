@@ -1,170 +1,147 @@
+import { motion, type Variants } from "motion/react";
 import Navbar from "../components/Navbar";
-import Header from "../components/Header";
-import AboutSousse from "../components/AboutSousse";
+import Hero from "../components/Hero";
 import Footer from "../components/Footer";
-import ScrollVelocity from "@/components/AnimationScrollSection";
-import { ProgramsSection } from "@/components/ProgramSection";
-import { Link } from "react-router-dom";
+import ScrollChoreography from "@/components/ui/scroll-choreography";
+import ExchangeCta from "@/components/ui/exchange-cta";
+import sousse1 from "@/assets/sousse1.jpg";
+import sousse3 from "@/assets/sousse3.jpeg";
+import sousse4 from "@/assets/sousse4.jpg";
+import sousse5 from "@/assets/sousse5.jpg";
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+/**
+ * Children reveal one after another as the block scrolls into view, and run
+ * back out in reverse order on the way up — `staggerDirection: -1` on hidden
+ * is what makes the exit read as a rewind rather than everything dropping at
+ * once.
+ */
+const group: Variants = {
+  hidden: { transition: { staggerChildren: 0.09, staggerDirection: -1 } },
+  show: { transition: { staggerChildren: 0.16, delayChildren: 0.05 } },
+};
+
+const rise: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 44,
+    filter: "blur(10px)",
+    transition: { duration: 0.5, ease: EASE },
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.9, ease: EASE },
+  },
+};
+
+const stats = [
+  { value: "300+", label: "Sunny Days/Year", color: "#FF6467" },
+  { value: "1.2M", label: "Annual Visitors", color: "#00B8DB" },
+  { value: "3000", label: "Years of History", color: "#FF8904" },
+];
 
 const Home: React.FC = () => {
   return (
-    <div style={{ backgroundColor: "#060010" }}>
+    <div className="bg-surface">
       <Navbar />
-      <div className="relative h-screen flex items-center pt-20 pb-12">
-        <div className="absolute inset-0 z-0">
-          <Header
-            colorStops={["#FF6467", "#00B8DB", "#FF8904"]}
-            blend={0.42}
-            amplitude={0.8}
-            speed={0.5}
-          />
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-4">
-              <span className="inline-block px-4 py-1 bg-blue-500 text-white text-sm font-medium rounded-full mb-4">
-                AIESEC in Hadrumet
-              </span>
-            </div>
-            <h1 className="text-6xl font-bold text-white mb-6 leading-tight">
-              Discover Global Opportunities
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
-                in the Heart of Tunisia
-              </span>
-            </h1>
-            <p className="text-gray-300 text-xl mb-8 max-w-3xl mx-auto">
-              Experience transformative journeys through Global Talent, Global
-              Volunteer, and Global Teaching opportunities in the beautiful city
-              of Sousse
-            </p>
-            <div className="flex gap-4 justify-center">
-              <a href="#programs">
-                <button className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-3 rounded-full font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-300 cursor-pointer ">
-                  Explore Opportunities
-                </button>
-              </a>
-                
-              
-              <Link to="/our-country">
-                <button className="border-2 border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
-                  About Sousse
-                </button>
-              </Link>
-            </div>
-            <div className="mt-8 flex gap-8 justify-center">
-              <div className="text-center">
-                <h3 className="text-[#00B8DB] font-bold text-xl">
-                  Global Talent
-                </h3>
-                <p className="text-gray-300 text-sm">
-                  Professional Internships
-                </p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-[#FF6467] font-bold text-xl">
-                  Global Volunteer
-                </h3>
-                <p className="text-gray-300 text-sm">Social Impact Projects</p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-[#FF8904] font-bold text-xl">
-                  Global Teacher
-                </h3>
-                <p className="text-gray-300 text-sm">Educational Experiences</p>
-              </div>
+
+      <Hero />
+
+      {/* Sousse, in pictures */}
+      <ScrollChoreography
+        className="mt-56"
+        images={{
+          topLeft: sousse1,
+          topRight: sousse3,
+          bottomLeft: sousse5,
+          bottomRight: sousse4,
+        }}
+        alt={{
+          topLeft: "The beach at Sousse",
+          topRight: "The medina of Sousse",
+          bottomLeft: "Sousse at night",
+          bottomRight: "The port of Sousse",
+        }}
+      />
+
+      <motion.div
+        variants={group}
+        initial="hidden"
+        whileInView="show"
+        // Reversible: replays in both directions rather than latching on
+        // the first pass.
+        viewport={{ once: false, amount: 0.25 }}
+        className="mx-auto mt-36 max-w-4xl px-4 text-center"
+      >
+        <div className="space-y-12">
+          <div className="space-y-4">
+            <motion.h2
+              variants={rise}
+              className="bg-gradient-to-r from-[#00B8DB] via-[#FF6467] to-[#FF8904] bg-clip-text text-5xl font-semibold text-transparent"
+            >
+              Where History Meets Future
+            </motion.h2>
+            <motion.p
+              variants={rise}
+              className="text-2xl font-light text-gray-300"
+            >
+              The Mediterranean's Hidden Gem
+            </motion.p>
+          </div>
+
+          <div className="space-y-8">
+            <motion.p
+              variants={rise}
+              className="text-lg leading-relaxed text-gray-300"
+            >
+              Sousse, Tunisia's pearl of the Sahel, is a city where 3,000 years
+              of history blend seamlessly with modern life. Our UNESCO-listed
+              medina stands as a testament to centuries of rich cultural
+              heritage, while our sun-kissed Mediterranean beaches offer the
+              perfect backdrop for contemporary coastal living.
+            </motion.p>
+
+            <motion.p
+              variants={rise}
+              className="text-lg leading-relaxed text-gray-300"
+            >
+              As a thriving educational and economic hub, Sousse has emerged as
+              a beacon for international talent. Here, ancient wisdom meets
+              modern innovation, creating unique opportunities for cultural
+              exchange and professional growth. Our city's warm hospitality and
+              dynamic atmosphere make it an ideal destination for those seeking
+              both personal and professional transformation.
+            </motion.p>
+          </div>
+
+          <div className="pt-3">
+            <div className="grid grid-cols-3 gap-8">
+              {stats.map((stat) => (
+                <motion.div
+                  key={stat.label}
+                  variants={rise}
+                  className="text-center"
+                >
+                  <h4
+                    className="mb-2 text-3xl font-normal"
+                    style={{ color: stat.color }}
+                  >
+                    {stat.value}
+                  </h4>
+                  <p className="text-gray-300">{stat.label}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
-      </div>
-      <div className="mt-20 text-center">
-        <div className="mb-14 space-y-4">
-          <h2 className="text-4xl font-normal text-white">
-            About to{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6467] to-[#FF8904]">
-              Sousse
-            </span>
-          </h2>
-        </div>
-        <AboutSousse />
+      </motion.div>
 
-        <div className="max-w-4xl mx-auto mt-36 px-4 text-center">
-          <div className="space-y-12">
-            {/* Main Title */}
-            <div className="space-y-4">
-              <h2 className="text-5xl font-semibold bg-gradient-to-r from-[#00B8DB] via-[#FF6467] to-[#FF8904] text-transparent bg-clip-text">
-                Where History Meets Future
-              </h2>
-              <p className="text-2xl text-gray-300 font-light">
-                The Mediterranean's Hidden Gem
-              </p>
-            </div>
-
-            {/* Description Paragraphs */}
-            <div className="space-y-8">
-              <p className="text-gray-300 text-lg leading-relaxed">
-                Sousse, Tunisia's pearl of the Sahel, is a city where 3,000
-                years of history blend seamlessly with modern life. Our
-                UNESCO-listed medina stands as a testament to centuries of rich
-                cultural heritage, while our sun-kissed Mediterranean beaches
-                offer the perfect backdrop for contemporary coastal living.
-              </p>
-
-              <p className="text-gray-300 text-lg leading-relaxed">
-                As a thriving educational and economic hub, Sousse has emerged
-                as a beacon for international talent. Here, ancient wisdom meets
-                modern innovation, creating unique opportunities for cultural
-                exchange and professional growth. Our city's warm hospitality
-                and dynamic atmosphere make it an ideal destination for those
-                seeking both personal and professional transformation.
-              </p>
-            </div>
-
-            {/* Stats Section */}
-            <div className="pt-3">
-              <div className="grid grid-cols-3 gap-8">
-                <div className="text-center ">
-                  <h4 className="text-3xl font-normal text-[#FF6467] mb-2">
-                    300+
-                  </h4>
-                  <p className="text-gray-300">Sunny Days/Year</p>
-                </div>
-                <div className="text-center ">
-                  <h4 className="text-3xl font-normal text-[#00B8DB] mb-2">
-                    1.2M
-                  </h4>
-                  <p className="text-gray-300">Annual Visitors</p>
-                </div>
-                <div className="text-center ">
-                  <h4 className="text-3xl font-normal text-[#FF8904] mb-2">
-                    3000
-                  </h4>
-                  <p className="text-gray-300">Years of History</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className=" my-60">
-        <ScrollVelocity
-          texts={[
-            "Sousse", // Latin
-            "سوسة", // Arabic
-            "Σούς", // Greek-ish transliteration
-            "スース", // Japanese Katakana (sūsu)
-            "苏斯", // Chinese simplified (approx.)
-            "सूसे", // Devanagari (Hindi)
-            "சூஸ்",
-            "سوسه", // Tamil approximation
-            "Susa", // Latin variant
-          ]}
-          velocity={100}
-          className="custom-scroll-text"
-        />
-      </div>
-      <div id="programs" className="">
-        <ProgramsSection />
+      {/* Closing: the line assembles as you scroll, then the CTAs arrive */}
+      <div className="mt-56">
+        <ExchangeCta />
       </div>
 
       <Footer />
